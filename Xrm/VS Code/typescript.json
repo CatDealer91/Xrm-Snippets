@@ -1,0 +1,150 @@
+{	
+	"Entity Form Template": {
+	"prefix": ["Form", "Template"],
+	"body": [
+	"namespace $detu.account.form {",
+		"\tlet formContext : Xrm.FormContext;",
+		"\texport function onLoad(_eventContext:Xrm.Events.EventContext) {",
+			"\t\tformContext = _eventContext.getFormContext();",
+			"\t\tregisterEvents();",
+			"\t\tswitch (formContext.ui.getFormType()) {",
+				"\t\t\tcase XrmEnum.FormType.Create:",
+					"\r",
+					"\t\t\t\tbreak;",
+				"\t\t\tcase XrmEnum.FormType.Update:",
+					"\r",
+					"\t\t\t\tbreak;",
+				"\t\t\tdefault:",
+					"\r",
+					"\t\t\t\tbreak;",
+			"\t\t}",
+		"\t\t}",
+
+		"\tfunction registerEvents() {",
+			"\t\tformContext.getAttribute(\"$detu_name\").addOnChange(onChange);",
+		"\t}",
+
+		"\tfunction onChange() {",
+		"\t}",
+	"}"
+	],
+		"description": "Template for Form Script, including a method for registering Events, regardless which FormState is active."
+	},	
+	"Confirm Dialog": {
+		"prefix": "confirm",
+		"body": [
+			"Xrm.Navigation.openConfirmDialog({ title: \"$Please confirm\", text: \"$Are you sure you want to proceed?\" }).then(",
+			"\tfunction (success) {",
+				"\t\tif (success.confirmed)",
+					"\t\t\tconsole.log(\"Dialog closed using OK button.\");",
+				"\t\telse",
+					"\t\t\tconsole.log(\"Dialog closed using Cancel button or X.\");",
+			"});"
+			
+			
+		],
+		"description": "Opens a new confirm Dialog"
+	},
+	"Error Dialog": {
+		"prefix": "error",
+		"body": [
+			"Xrm.Navigation.openErrorDialog({message: \"$An error occured\", details:\"$Please provide your support team with the retrieved log file\" }).then(",
+			"\tfunction (success) {",
+				"\t\tconsole.log(success);",
+			"},",
+			"\tfunction (error)",
+				"\t\tconsole.log(error);",
+			"});"
+		],
+		"description": "Opens a new error Dialog"
+	},
+	"Alert Dialog": {
+		"prefix": "alert",
+		"body": [
+			"Xrm.Navigation.openAlertDialog({ title: \"$Warning\", text: \"$Something_happened\", confirmButtonLabel:\"$Ok\" });"
+		],
+		"description": "Opens a new alert Dialog"
+	},
+	"Delete Record": {
+		"prefix": "delete",
+		"body": [
+			"Xrm.WebApi.deleteRecord(\"$account\", \"$id\").then(",
+			"\tfunction success(result) {",
+				"\t\tconsole.log(\"Record deleted\");",
+			"\t},",
+			"\tfunction (error) {",
+				"\t\tconsole.log(error.message);",
+			"\t}",
+			");"
+		],
+		"description": "Deletes a given record."
+	},
+	"Update Record": {
+		"prefix": "update",
+		"body": [
+			"var data =",
+			"{",
+				"\t\"name\": \"Updated Sample Account \",",
+				"\t\"creditonhold\": true,",
+				"\t\"address1_latitude\": 47.639583,",
+				"\t\"revenue\": 6000000,",
+				"\t\"accountcategorycode\": 2",
+			"}",
+			"Xrm.WebApi.updateRecord(\"$account\", \"$id\", data).then(",
+			"\tfunction success(result) {",
+				"\t\tconsole.log(\"Record updated\");",
+			"\t},",
+			"\tfunction (error) {",
+				"\t\tconsole.log(error.message);",
+			"\t}",
+			");"
+		],
+		"description": "Updates a given record. (Sample data included)"
+	},
+	"Retrieve multiple Records": {
+		"prefix": "Retrieve multiple",
+		"body": [
+			"Xrm.WebApi.retrieveMultipleRecords(\"$account\", \"?\\$select=$name\").then(",
+			"\tfunction success(result) {",
+				"\t\tfor (var i = 0; i < result.entities.length; i++) {",
+					"\t\t\tconsole.log(result.entities[i]);",
+				"\t\t}",
+			"\t},",
+			"\tfunction (error) {",
+				"\t\tconsole.log(error.message);",
+			"\t}",
+			");"
+		],
+		"description": "Retrieves multiple records."
+	},
+	"Retrieve expanded Record": {
+		"prefix": "Retrieve Expand",
+		"body": [
+			"Xrm.WebApi.retrieveRecord(\"$account\", \"$id\", \"?\\$select=$name&\\$expand=$primarycontactid(\\$select=$contactid,$fullname)\").then(",
+			"\tfunction success(result) {",
+				"\t\tconsole.log(`Retrieved values: Name: ${result.name}, Primary Contact ID: ${result.primarycontactid.contactid}, Primary Contact Name: ${result.primarycontactid.fullname}`);",
+				"\t\t}",
+			"\t},",
+			"\tfunction (error) {",
+				"\t\tconsole.log(error.message);",
+			"\t}",
+			");"
+		],
+		"description": "Retrieves a record with expanded data/Lookup."
+	},
+	"Retrieve Record": {
+		"prefix": "Retrieve",
+		"body": [
+			"Xrm.WebApi.retrieveRecord(\"$account\", \"$id\", \"?\\$select=$name,$revenue\").then(",
+			"\tfunction success(result) {",
+				"\t\tconsole.log(`Retrieved values: Name: ${result.name}, Revenue: ${result.revenue}`);",
+				"\t\t}",
+			"\t},",
+			"\tfunction (error) {",
+				"\t\tconsole.log(error.message);",
+			"\t}",
+			");"
+		],
+		"description": "Retrieves a record with selected fields."
+	}
+}
