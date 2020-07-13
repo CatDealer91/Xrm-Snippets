@@ -87,7 +87,7 @@ Xrm.WebApi.updateRecord("account", "5531d753-95af-e711-a94e-000d3a11e605", data)
 
 
 // define the data to update a record
-var data =
+var data  =
 {
     "primarycontactid@odata.bind": "/contacts(61a0e5b9-88df-e311-b8e5-6c3be5a8b200)"
 }
